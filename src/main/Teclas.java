@@ -4,7 +4,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class Teclas implements KeyListener {
-    private boolean esquerda, direita, cima, baixo;
+    private boolean esquerda, direita, cima, baixo, stop;
+
+    public Teclas() {
+        this.stop = true;
+    }
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -27,6 +31,8 @@ public class Teclas implements KeyListener {
         if (codigo == KeyEvent.VK_D) {
             direita = true;
         }
+
+        stop = false;
     }
 
     @Override
@@ -35,6 +41,7 @@ public class Teclas implements KeyListener {
 
         if (codigo == KeyEvent.VK_W) {
             cima = false;
+
         }
         if (codigo == KeyEvent.VK_S) {
             baixo = false;
@@ -45,6 +52,12 @@ public class Teclas implements KeyListener {
         if (codigo == KeyEvent.VK_D) {
             direita = false;
         }
+
+        stop = true;
+    }
+
+    public boolean isStop() {
+        return stop;
     }
 
     public boolean isCima() {

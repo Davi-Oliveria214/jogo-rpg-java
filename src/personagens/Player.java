@@ -22,6 +22,12 @@ public class Player extends Entidades {
         this.screenX = jogoPainel.getScreenWidth() / 2 - (jogoPainel.tileSize - 2);
         this.screenY = jogoPainel.getScreenHeight() / 2 - (jogoPainel.tileSize - 2);
 
+        this.areaSolida = new Rectangle();
+        this.areaSolida.x = 8;
+        this.areaSolida.y = 16;
+        this.areaSolida.width = 32;
+        this.areaSolida.height = 32;
+
         this.setValores();
         this.getPlayerImg();
     }
@@ -45,42 +51,42 @@ public class Player extends Entidades {
         BufferedImage img = null;
 
 
-        if (tm.isBaixo() || tm.isCima() || tm.isEsquerda() || tm.isDireita()) {
-            switch (this.direcao) {
-                case "down":
-                    if (spriteNum == 1) {
-                        img = this.down1;
-                    }
-                    if (spriteNum == 2) {
-                        img = this.down2;
-                    }
-                    break;
-                case "up":
-                    if (spriteNum == 1) {
-                        img = this.up1;
-                    }
-                    if (spriteNum == 2) {
-                        img = this.up2;
-                    }
-                    break;
-                case "left":
-                    if (spriteNum == 1) {
-                        img = this.left1;
-                    }
-                    if (spriteNum == 2) {
-                        img = this.left2;
-                    }
-                    break;
-                case "right":
-                    if (spriteNum == 1) {
-                        img = this.right1;
-                    }
-                    if (spriteNum == 2) {
-                        img = this.right2;
-                    }
-                    break;
-            }
-        } else {
+        switch (this.direcao) {
+            case "down":
+                if (spriteNum == 1) {
+                    img = this.down1;
+                }
+                if (spriteNum == 2) {
+                    img = this.down2;
+                }
+                break;
+            case "up":
+                if (spriteNum == 1) {
+                    img = this.up1;
+                }
+                if (spriteNum == 2) {
+                    img = this.up2;
+                }
+                break;
+            case "left":
+                if (spriteNum == 1) {
+                    img = this.left1;
+                }
+                if (spriteNum == 2) {
+                    img = this.left2;
+                }
+                break;
+            case "right":
+                if (spriteNum == 1) {
+                    img = this.right1;
+                }
+                if (spriteNum == 2) {
+                    img = this.right2;
+                }
+                break;
+        }
+
+        if (this.tm.isStop()) {
             img = switch (direcao) {
                 case "down" -> this.down;
                 case "up" -> this.up;
@@ -116,28 +122,49 @@ public class Player extends Entidades {
     }
 
     public void update() {
-        if (tm.isCima()) {
-            this.direcao = "up";
-            this.wordY -= velocidade;
-        } else if (tm.isBaixo()) {
-            this.direcao = "down";
-            this.wordY += velocidade;
-        } else if (tm.isDireita()) {
-            this.direcao = "right";
-            this.wordX += velocidade;
-        } else if (tm.isEsquerda()) {
-            this.direcao = "left";
-            this.wordX -= velocidade;
-        }
+        if (tm.isBaixo() || tm.isCima() || tm.isEsquerda() || tm.isDireita()) {
+            if (tm.isCima()) {
+                this.direcao = "up";
 
-        this.spriteCounter++;
-        if (this.spriteCounter > 12) {
-            if (spriteNum == 1) {
-                spriteNum = 2;
-            } else if (spriteNum == 2) {
-                spriteNum = 1;
+            } else if (tm.isBaixo()) {
+                this.direcao = "down";
+
+            } else if (tm.isDireita()) {
+                this.direcao = "right";
+
+            } else if (tm.isEsquerda()) {
+                this.direcao = "left";
             }
-            this.spriteCounter = 0;
+
+            colisaoOn = false;
+            jogoPainel.getChecar().checar(this);
+
+            if (!colisaoOn) {
+                switch (this.direcao) {
+                    case "up":
+                        this.wordY -= velocidade;
+                        break;
+                    case "down":
+                        this.wordY += velocidade;
+                        break;
+                    case "right":
+                        this.wordX += velocidade;
+                        break;
+                    case "left":
+                        this.wordX -= velocidade;
+                        break;
+                }
+            }
+
+            this.spriteCounter++;
+            if (this.spriteCounter > 12) {
+                if (spriteNum == 1) {
+                    spriteNum = 2;
+                } else if (spriteNum == 2) {
+                    spriteNum = 1;
+                }
+                this.spriteCounter = 0;
+            }
         }
     }
 }

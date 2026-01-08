@@ -11,9 +11,9 @@ import java.io.InputStreamReader;
 import java.util.Objects;
 
 public class GeradorTijolo {
+    public final int[][] mapTilenum;
     private final JogoPainel jogoPainel;
-    private final Tijolo[] tijolo;
-    private final int[][] mapTilenum;
+    public final Tijolo[] tijolo;
 
     public GeradorTijolo(JogoPainel jogoPainel) {
         this.jogoPainel = jogoPainel;
@@ -34,9 +34,11 @@ public class GeradorTijolo {
 
             tijolo[2] = new Tijolo();
             tijolo[2].setImageTile(ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/res/tijolos/agua.png"))));
+            tijolo[2].setColisao(true);
 
             tijolo[3] = new Tijolo();
             tijolo[3].setImageTile(ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/res/tijolos/lava.png"))));
+            tijolo[3].setColisao(true);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -4,7 +4,11 @@ import java.awt.image.BufferedImage;
 
 public class Tijolo {
     private BufferedImage imageTile;
-    private boolean colisao = false;
+    private boolean colisao;
+
+    public Tijolo() {
+        this.colisao = false;
+    }
 
     public BufferedImage getImageTile() {
         return imageTile;

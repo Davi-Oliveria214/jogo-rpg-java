@@ -25,6 +25,7 @@ public class JogoPainel extends JPanel implements Runnable {
     private final Teclas teclas;
     private final Player player;
     private Thread loopGame;
+    private ChecarColisao checar;
 
     public JogoPainel() {
         this.setBackground(Color.black);
@@ -33,10 +34,19 @@ public class JogoPainel extends JPanel implements Runnable {
 
         teclas = new Teclas();
         geradorTijolo = new GeradorTijolo(this);
+        checar = new ChecarColisao(this);
         player = new Player(teclas, this);
 
         this.addKeyListener(teclas);
         this.setFocusable(true);
+    }
+
+    public ChecarColisao getChecar() {
+        return checar;
+    }
+
+    public GeradorTijolo getGeradorTijolo() {
+        return geradorTijolo;
     }
 
     public int getWorldWidth() {
