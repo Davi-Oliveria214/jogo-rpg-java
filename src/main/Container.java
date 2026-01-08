@@ -3,6 +3,7 @@ package main;
 import javax.swing.*;
 
 public class Container extends JFrame {
+
     public Container() {
         JogoPainel jogoPainel = new JogoPainel();
 
@@ -10,7 +11,7 @@ public class Container extends JFrame {
         setResizable(false);
         setTitle("Jogo");
 
-        this.add(jogoPainel);
+        add(jogoPainel);
         jogoPainel.startGame();
         this.pack();
         this.setLocationRelativeTo(null);

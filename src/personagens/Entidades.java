@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 public abstract class Entidades {
     protected Image personagem;
 
-    protected int x, y;
+    protected int wordX, wordY;
     protected int velocidade;
 
     protected BufferedImage up, up1, up2, down, down1, down2, left, left1, left2, right, right1, right2;
@@ -50,19 +50,19 @@ public abstract class Entidades {
         this.personagem = personagem;
     }
 
-    public int getX() {
-        return x;
+    public int getWordX() {
+        return wordX;
     }
 
-    public void setX(int x) {
-        this.x = x;
+    public void setWordX(int wordX) {
+        this.wordX = wordX;
     }
 
-    public int getY() {
-        return y;
+    public int getWordY() {
+        return wordY;
     }
 
-    public void setY(int y) {
-        this.y = y;
+    public void setWordY(int wordY) {
+        this.wordY = wordY;
     }
 }

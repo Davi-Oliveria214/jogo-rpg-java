@@ -7,15 +7,20 @@ import javax.swing.*;
 import java.awt.*;
 
 public class JogoPainel extends JPanel implements Runnable {
+    // Tamanho do mapa
+    public final int maxWorldWidth = 50;
+    public final int maxWorldHeight = 50;
+
+    // Tamanho original dos blocos e scala
     private final int originalTileSize = 16;
     private final int scale = 3;
 
+    // Tamanho dos blocos
     public final int tileSize = originalTileSize * scale;
-
     private final int maxScreenWidth = 16;
     private final int maxScreenHeight = 12;
-
     private final int FPS = 60;
+
     private final GeradorTijolo geradorTijolo;
     private final Teclas teclas;
     private final Player player;
@@ -34,6 +39,14 @@ public class JogoPainel extends JPanel implements Runnable {
         this.setFocusable(true);
     }
 
+    public int getWorldWidth() {
+        return tileSize * maxWorldWidth;
+    }
+
+    public int getWorldHeight() {
+        return tileSize * maxWorldHeight;
+    }
+
     public int getMaxScreenHeight() {
         return maxScreenHeight;
     }
@@ -48,6 +61,10 @@ public class JogoPainel extends JPanel implements Runnable {
 
     public int getScreenHeight() {
         return tileSize * maxScreenHeight;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 
     public void startGame() {

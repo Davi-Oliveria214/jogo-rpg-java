@@ -20,8 +20,8 @@ public class GeradorTijolo {
 
         tijolo = new Tijolo[10];
         this.getImagemTijolo();
-        this.mapTilenum = new int[jogoPainel.getMaxScreenWidth()][jogoPainel.getMaxScreenHeight()];
-        this.carregarMapa();
+        this.mapTilenum = new int[jogoPainel.maxWorldWidth][jogoPainel.maxWorldHeight];
+        this.carregarMapa("/res/mapas/mapa1.txt");
     }
 
     public void getImagemTijolo() {
@@ -42,16 +42,16 @@ public class GeradorTijolo {
         }
     }
 
-    public void carregarMapa() {
+    public void carregarMapa(String mapa) {
         try {
-            InputStream is = getClass().getResourceAsStream("/res/mapas/mapa1.txt");
+            InputStream is = getClass().getResourceAsStream(mapa);
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
-            for (int altura = 0; altura < jogoPainel.getMaxScreenHeight(); altura++) {
+            for (int altura = 0; altura < jogoPainel.maxWorldHeight; altura++) {
                 String numMapa = br.readLine();
                 String[] numero = numMapa.split(" ");
 
-                for (int largura = 0; largura < jogoPainel.getMaxScreenWidth(); largura++) {
+                for (int largura = 0; largura < jogoPainel.maxWorldWidth; largura++) {
                     if (largura < numero.length) {
                         int num = Integer.parseInt(numero[largura]);
                         mapTilenum[largura][altura] = num;
@@ -68,23 +68,21 @@ public class GeradorTijolo {
     public void gerarTijolo(Graphics2D g2d) {
         int altura = 0;
         int largura = 0;
-        int x = 0;
-        int y = 0;
 
-        while (largura < jogoPainel.getMaxScreenWidth() && altura < jogoPainel.getMaxScreenHeight()) {
+        while (largura < jogoPainel.maxWorldWidth && altura < jogoPainel.maxWorldHeight) {
             int numMapa = mapTilenum[largura][altura];
 
-            g2d.drawImage(tijolo[numMapa].getImageTile(), x, y, jogoPainel.tileSize, jogoPainel.tileSize, null);
+            int worldX = largura * jogoPainel.tileSize;
+            int worldY = altura * jogoPainel.tileSize;
+            int screenX = worldX - jogoPainel.getPlayer().getWordX() + jogoPainel.getPlayer().getScreenX();
+            int screenY = worldY - jogoPainel.getPlayer().getWordY() + jogoPainel.getPlayer().getScreenY();
 
+            g2d.drawImage(tijolo[numMapa].getImageTile(), screenX, screenY, jogoPainel.tileSize, jogoPainel.tileSize, null);
             largura++;
-            x += jogoPainel.tileSize;
 
-            if (largura == jogoPainel.getMaxScreenWidth()) {
+            if (largura == jogoPainel.maxWorldWidth) {
                 largura = 0;
-                x = 0;
-
                 altura++;
-                y += jogoPainel.tileSize;
             }
         }
     }

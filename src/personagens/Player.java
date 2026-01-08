@@ -12,17 +12,31 @@ public class Player extends Entidades {
     private final Teclas tm;
     private final JogoPainel jogoPainel;
 
+    private final int screenX;
+    private final int screenY;
+
     public Player(Teclas tm, JogoPainel jogoPainel) {
         this.tm = tm;
         this.jogoPainel = jogoPainel;
+
+        this.screenX = jogoPainel.getScreenWidth() / 2 - (jogoPainel.tileSize - 2);
+        this.screenY = jogoPainel.getScreenHeight() / 2 - (jogoPainel.tileSize - 2);
 
         this.setValores();
         this.getPlayerImg();
     }
 
+    public int getScreenX() {
+        return screenX;
+    }
+
+    public int getScreenY() {
+        return screenY;
+    }
+
     public void setValores() {
-        this.x = 50;
-        this.y = 50;
+        this.wordX = jogoPainel.tileSize * 23;
+        this.wordY = jogoPainel.tileSize * 21;
         this.velocidade = 4;
         this.direcao = "down";
     }
@@ -76,7 +90,7 @@ public class Player extends Entidades {
             };
         }
 
-        g2d.drawImage(img, this.x, this.y, this.jogoPainel.tileSize, this.jogoPainel.tileSize, null);
+        g2d.drawImage(img, this.screenX, this.screenY, this.jogoPainel.tileSize, this.jogoPainel.tileSize, null);
     }
 
     public void getPlayerImg() {
@@ -104,16 +118,16 @@ public class Player extends Entidades {
     public void update() {
         if (tm.isCima()) {
             this.direcao = "up";
-            this.y -= velocidade;
+            this.wordY -= velocidade;
         } else if (tm.isBaixo()) {
             this.direcao = "down";
-            this.y += velocidade;
+            this.wordY += velocidade;
         } else if (tm.isDireita()) {
             this.direcao = "right";
-            this.x += velocidade;
+            this.wordX += velocidade;
         } else if (tm.isEsquerda()) {
             this.direcao = "left";
-            this.x -= velocidade;
+            this.wordX -= velocidade;
         }
 
         this.spriteCounter++;
