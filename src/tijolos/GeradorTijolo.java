@@ -8,37 +8,54 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 public class GeradorTijolo {
     public final int[][] mapTilenum;
+    public final List<Tijolo> tijolos;
     private final JogoPainel jogoPainel;
-    public final Tijolo[] tijolo;
 
     public GeradorTijolo(JogoPainel jogoPainel) {
         this.jogoPainel = jogoPainel;
 
-        tijolo = new Tijolo[10];
+        tijolos = new ArrayList<>();
         this.getImagemTijolo();
         this.mapTilenum = new int[jogoPainel.maxWorldWidth][jogoPainel.maxWorldHeight];
-        this.carregarMapa("/res/mapas/mapa1.txt");
+        this.carregarMapa("/res/mapas/Mapa1.txt");
     }
 
     public void getImagemTijolo() {
-        try {
-            tijolo[0] = new Tijolo();
-            tijolo[0].setImageTile(ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/res/tijolos/grama.png"))));
+        Path diretorio = Paths.get("src/res/tijolos/");
+        try (Stream<Path> stream = Files.list(diretorio)) {
+            List<String> lista = stream.filter(Files::isRegularFile).map(path -> path.getFileName().toString()).sorted((a, b) -> {
+                int n1 = Integer.parseInt(a.split("_")[0]);
+                int n2 = Integer.parseInt(b.split("_")[0]);
+                return Integer.compare(n1, n2);
+            }).toList();
 
-            tijolo[1] = new Tijolo();
-            tijolo[1].setImageTile(ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/res/tijolos/pedra.png"))));
+            List<String> listaSolidos = Files.readAllLines(Path.of("src/res/utilitarios/solidos"));
 
-            tijolo[2] = new Tijolo();
-            tijolo[2].setImageTile(ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/res/tijolos/agua.png"))));
-            tijolo[2].setColisao(true);
+            for (String bloco : lista) {
+                String semExtensao = bloco.substring(0, bloco.lastIndexOf("."));
+                String semId = semExtensao.split("_", 2)[1];
+                String blocoVerificar = semId.split("_")[0];
 
-            tijolo[3] = new Tijolo();
-            tijolo[3].setImageTile(ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/res/tijolos/lava.png"))));
-            tijolo[3].setColisao(true);
+                Tijolo tijolo = new Tijolo();
+                for (String solidos : listaSolidos) {
+                    if (solidos.equals(blocoVerificar)) {
+                        tijolo.setColisao(true);
+                    }
+                }
+
+                tijolo.setImageTile(ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/res/tijolos/" + bloco))));
+                this.tijolos.add(tijolo);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -79,7 +96,7 @@ public class GeradorTijolo {
             int screenX = worldX - jogoPainel.getPlayer().getWordX() + jogoPainel.getPlayer().getScreenX();
             int screenY = worldY - jogoPainel.getPlayer().getWordY() + jogoPainel.getPlayer().getScreenY();
 
-            g2d.drawImage(tijolo[numMapa].getImageTile(), screenX, screenY, jogoPainel.tileSize, jogoPainel.tileSize, null);
+            g2d.drawImage(tijolos.get(numMapa).getImageTile(), screenX, screenY, jogoPainel.tileSize, jogoPainel.tileSize, null);
             largura++;
 
             if (largura == jogoPainel.maxWorldWidth) {

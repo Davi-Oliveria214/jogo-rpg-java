@@ -47,7 +47,7 @@ public class ChecarColisao {
                 break;
         }
 
-        if (jogoPainel.getGeradorTijolo().tijolo[tileNum1].isColisao() || jogoPainel.getGeradorTijolo().tijolo[tileNum2].isColisao()) {
+        if (jogoPainel.getGeradorTijolo().tijolos.get(tileNum1).isColisao() || jogoPainel.getGeradorTijolo().tijolos.get(tileNum2).isColisao()) {
             entidade.setColisaoOn(true);
         }
     }
